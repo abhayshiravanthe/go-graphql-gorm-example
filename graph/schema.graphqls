@@ -1,0 +1,69 @@
+# GraphQL schema example
+#
+# https://gqlgen.com/getting-started/
+
+type JobAttributes {
+  isPermanent: Boolean
+  isContract: Boolean
+  contractDuration: String
+  salary: String
+}
+
+type JobRequirement {
+  experience: String
+  domain: String
+  education: String
+  gender: String
+}
+
+type Job {
+  id: ID!
+  text: String!
+  description: String!
+  isArchived: Boolean!
+  isDeleted: Boolean!
+  tags: [String]
+  skills: [String]
+  deadlineDate: String
+  attributes: JobAttributes
+  requirement: JobRequirement
+  user: User
+}
+
+type User {
+  id: ID!
+  name: String!
+}
+
+type Query {
+  jobs: [Job!]!
+}
+
+input JobAttributesInput {
+  isPermanent: Boolean
+  isContract: Boolean
+  contractDuration: String
+  salary: String
+}
+
+input JobRequirementInput {
+  experience: String
+  domain: String
+  education: String
+  gender: String
+}
+
+input NewJob {
+  text: String!
+  description: String!
+  tags: [String]
+  skills: [String]
+  deadlineDate: String
+  attributes: JobAttributesInput
+  requirement: JobRequirementInput
+  userId: String
+}
+
+type Mutation {
+  createJob(input: NewJob!): Job!
+}
