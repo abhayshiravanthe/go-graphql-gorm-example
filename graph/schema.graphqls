@@ -22,8 +22,8 @@ type Job {
   description: String!
   isArchived: Boolean!
   isDeleted: Boolean!
-  tags: [String]
-  skills: [String]
+  tags: String
+  skills: String
   deadlineDate: String
   attributes: JobAttributes
   requirement: JobRequirement
@@ -56,8 +56,8 @@ input JobRequirementInput {
 input NewJob {
   text: String!
   description: String!
-  tags: [String]
-  skills: [String]
+  tags: String
+  skills: String
   deadlineDate: String
   attributes: JobAttributesInput
   requirement: JobRequirementInput

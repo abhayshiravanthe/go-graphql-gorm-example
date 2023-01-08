@@ -16,8 +16,6 @@ func (r *mutationResolver) CreateJob(ctx context.Context, input model.NewJob) (*
 	job := model.Job{
 		Text:        input.Text,
 		Description: input.Description,
-		IsArchived:  false,
-		IsDeleted:   false,
 		Tags:        input.Tags,
 		Skills:      input.Skills,
 	}

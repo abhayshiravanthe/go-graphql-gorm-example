@@ -8,8 +8,8 @@ type Job struct {
 	Description  string          `json:"description"`
 	IsArchived   bool            `json:"isArchived"`
 	IsDeleted    bool            `json:"isDeleted"`
-	Tags         []*string       `json:"tags"`
-	Skills       []*string       `json:"skills"`
+	Tags         *string         `json:"tags"`
+	Skills       *string         `json:"skills"`
 	DeadlineDate *string         `json:"deadlineDate"`
 	Attributes   *JobAttributes  `json:"attributes"`
 	Requirement  *JobRequirement `json:"requirement"`
@@ -47,8 +47,8 @@ type JobRequirementInput struct {
 type NewJob struct {
 	Text         string               `json:"text"`
 	Description  string               `json:"description"`
-	Tags         []*string            `json:"tags"`
-	Skills       []*string            `json:"skills"`
+	Tags         *string              `json:"tags"`
+	Skills       *string              `json:"skills"`
 	DeadlineDate *string              `json:"deadlineDate"`
 	Attributes   *JobAttributesInput  `json:"attributes"`
 	Requirement  *JobRequirementInput `json:"requirement"`
