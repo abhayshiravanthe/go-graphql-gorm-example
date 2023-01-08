@@ -2,19 +2,11 @@
 #
 # https://gqlgen.com/getting-started/
 
-type JobAttributes {
-  isPermanent: Boolean
-  isContract: Boolean
-  contractDuration: String
-  salary: String
-}
+directive @goField(forceResolver: Boolean, name: String) on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
 
-type JobRequirement {
-  experience: String
-  domain: String
-  education: String
-  gender: String
-}
+directive @auth on FIELD_DEFINITION
+
+scalar Any
 
 type Job {
   id: ID!
@@ -25,32 +17,15 @@ type Job {
   tags: String
   skills: String
   deadlineDate: String
-  attributes: JobAttributes
-  requirement: JobRequirement
-  user: User
-}
-
-type User {
-  id: ID!
-  name: String!
-}
-
-type Query {
-  jobs: [Job!]!
-}
-
-input JobAttributesInput {
   isPermanent: Boolean
   isContract: Boolean
   contractDuration: String
   salary: String
-}
-
-input JobRequirementInput {
   experience: String
   domain: String
   education: String
   gender: String
+  user: User
 }
 
 input NewJob {
@@ -59,11 +34,50 @@ input NewJob {
   tags: String
   skills: String
   deadlineDate: String
-  attributes: JobAttributesInput
-  requirement: JobRequirementInput
+  isPermanent: Boolean
+  isContract: Boolean
+  contractDuration: String
+  salary: String
+  experience: String
+  domain: String
+  education: String
+  gender: String
   userId: String
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  firstName: String
+  lastName: String
+  mobile: String
+  isLocked: Boolean
+}
+
+input NewUser {
+  name: String!
+  email: String!
+  password: String!
+  firstName: String
+  lastName: String
+  mobile: String
+}
+
+type AuthOps {
+  login(email: String!, password: String!): Any! @goField(forceResolver: true)
+  register(input: NewUser!): Any! @goField(forceResolver: true)
+}
+
+type Query {
+  jobs: [Job!]!
+  user(id: ID!): User! @goField(forceResolver: true)
+
+  # Add Protected Resource
+  protected: String! @goField(forceResolver: true) @auth
 }
 
 type Mutation {
   createJob(input: NewJob!): Job!
+  auth: AuthOps! @goField(forceResolver: true)
 }

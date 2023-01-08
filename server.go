@@ -8,6 +8,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/abhayshiro/golang-graphql/graph"
+	"github.com/abhayshiro/golang-graphql/database"
 	"github.com/joho/godotenv"
 )
 
@@ -26,9 +27,9 @@ func main() {
 	}
 
 	// Connect to the database
-	Database := graph.Connect()
-	// Set DB value in resolver
-	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{ DB: Database }}))
+	database.ConnectDatabase()
+
+	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{  }}))
 
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
 	http.Handle("/query", srv)

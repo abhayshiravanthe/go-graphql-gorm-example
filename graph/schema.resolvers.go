@@ -9,36 +9,89 @@ import (
 	"fmt"
 
 	"github.com/abhayshiro/golang-graphql/graph/model"
+	"github.com/abhayshiro/golang-graphql/service"
 )
+
+// Login is the resolver for the login field.
+func (r *authOpsResolver) Login(ctx context.Context, obj *model.AuthOps, email string, password string) (interface{}, error) {
+	return service.UserLogin(ctx, email, password)
+}
+
+// Register is the resolver for the register field.
+func (r *authOpsResolver) Register(ctx context.Context, obj *model.AuthOps, input model.NewUser) (interface{}, error) {
+	return service.UserCreate(ctx, input)
+}
+
+// IsPermanent is the resolver for the isPermanent field.
+func (r *jobResolver) IsPermanent(ctx context.Context, obj *model.Job) (*bool, error) {
+	panic(fmt.Errorf("not implemented: IsPermanent - isPermanent"))
+}
+
+// IsContract is the resolver for the isContract field.
+func (r *jobResolver) IsContract(ctx context.Context, obj *model.Job) (*bool, error) {
+	panic(fmt.Errorf("not implemented: IsContract - isContract"))
+}
+
+// ContractDuration is the resolver for the contractDuration field.
+func (r *jobResolver) ContractDuration(ctx context.Context, obj *model.Job) (*string, error) {
+	panic(fmt.Errorf("not implemented: ContractDuration - contractDuration"))
+}
+
+// Salary is the resolver for the salary field.
+func (r *jobResolver) Salary(ctx context.Context, obj *model.Job) (*string, error) {
+	panic(fmt.Errorf("not implemented: Salary - salary"))
+}
+
+// Experience is the resolver for the experience field.
+func (r *jobResolver) Experience(ctx context.Context, obj *model.Job) (*string, error) {
+	panic(fmt.Errorf("not implemented: Experience - experience"))
+}
+
+// Domain is the resolver for the domain field.
+func (r *jobResolver) Domain(ctx context.Context, obj *model.Job) (*string, error) {
+	panic(fmt.Errorf("not implemented: Domain - domain"))
+}
+
+// Education is the resolver for the education field.
+func (r *jobResolver) Education(ctx context.Context, obj *model.Job) (*string, error) {
+	panic(fmt.Errorf("not implemented: Education - education"))
+}
+
+// Gender is the resolver for the gender field.
+func (r *jobResolver) Gender(ctx context.Context, obj *model.Job) (*string, error) {
+	panic(fmt.Errorf("not implemented: Gender - gender"))
+}
 
 // CreateJob is the resolver for the createJob field.
 func (r *mutationResolver) CreateJob(ctx context.Context, input model.NewJob) (*model.Job, error) {
-	job := model.Job{
-		Text:        input.Text,
-		Description: input.Description,
-		Tags:        input.Tags,
-		Skills:      input.Skills,
-	}
+	return service.JobCreate(ctx, input)
+}
 
-	_, err := r.DB.Model(&job).Insert()
-	if err != nil {
-		return nil, fmt.Errorf("Error creating a new job")
-	}
-
-	return &job, nil
+// Auth is the resolver for the auth field.
+func (r *mutationResolver) Auth(ctx context.Context) (*model.AuthOps, error) {
+	return &model.AuthOps{}, nil
 }
 
 // Jobs is the resolver for the jobs field.
 func (r *queryResolver) Jobs(ctx context.Context) ([]*model.Job, error) {
-	var jobs []*model.Job
-
-	err := r.DB.Model(&jobs).Select()
-	if err != nil {
-		return nil, err
-	}
-
-	return jobs, nil
+	return service.GetJobs()
 }
+
+// User is the resolver for the user field.
+func (r *queryResolver) User(ctx context.Context, id string) (*model.User, error) {
+	return service.UserGetByID(ctx, id)
+}
+
+// Protected is the resolver for the protected field.
+func (r *queryResolver) Protected(ctx context.Context) (string, error) {
+	return "Success", nil
+}
+
+// AuthOps returns AuthOpsResolver implementation.
+func (r *Resolver) AuthOps() AuthOpsResolver { return &authOpsResolver{r} }
+
+// Job returns JobResolver implementation.
+func (r *Resolver) Job() JobResolver { return &jobResolver{r} }
 
 // Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
@@ -46,5 +99,7 @@ func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 // Query returns QueryResolver implementation.
 func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
+type authOpsResolver struct{ *Resolver }
+type jobResolver struct{ *Resolver }
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
